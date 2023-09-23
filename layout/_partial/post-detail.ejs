@@ -2,6 +2,7 @@
 <div id="artDetail">
     <div class="card">
         <div class="card-content article-info">
+            <% if (page.pagetype != "personal") { %>
             <div class="row tag-cate">
                 <div class="col s7">
                     <% if (page.tags && page.tags.length) { %>
@@ -31,6 +32,8 @@
                     <% } %>
                 </div>
             </div>
+            
+
 
             <div class="post-info">
                 <% if (theme.postInfo.date) { %>
@@ -68,6 +71,19 @@
                     </div>
 				<% } %>
             </div>
+            <% } else { %>
+                <div class="post-info">
+    
+                    <div class="post-date info-break-policy">
+                        <i class="fas fa-user"></i>&nbsp;&nbsp;<%- page.author %>
+                    </div>
+
+                    <div class="post-date info-break-policy">
+                        <i class="fas fa-envelope"></i>&nbsp;&nbsp;<%- page.email %>
+                    </div>
+    
+                </div>
+            <% } %>
         </div>
         <hr class="clearfix">
 
@@ -133,7 +149,7 @@
                 <% } %>
             </div>
             <hr/>
-
+            <% if (page.pagetype != "personal") { %>
             <%- partial('_partial/reprint-statement') %>
 
             <div class="tag_share" style="display: block;">
@@ -159,8 +175,12 @@
             <% if (theme.reward && theme.reward.enable) { %>
                 <%- partial('_partial/reward') %>
             <% } %>
+            <% } %>
         </div>
     </div>
+
+    <% if (page.comments) { %>
+    
 
     <% if (theme.gitalk && theme.gitalk.enable) { %>
         <%- partial('_partial/gitalk') %>
@@ -193,11 +213,15 @@
     <% if (theme.twikoo && theme.twikoo.enable) { %>
         <%- partial('_partial/twikoo') %>
     <% } %>
+    
+    <% } %>
 
+    <% if (page.pagetype != "personal") { %>
     <%- partial('_partial/prev-next') %>
+    <% } %>
+    
 </div>
-
-<% if (theme.copyright.enable) { %>
+<% if (theme.copyright.enable && page.pagetype != "personal") { %>
 <script>
     $('#articleContent').on('copy', function (e) {
         // IE8 or earlier browser is 'undefined'

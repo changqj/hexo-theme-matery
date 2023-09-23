@@ -20,18 +20,22 @@ function getCurrentGallery(galleries, pageTitle) {
 var currentGallery = getCurrentGallery(galleries, pageTitle)
 
 var photos = currentGallery.photos;
+var photopath = currentGallery.photopath;
+var citys = currentGallery.descriptions;
+
 var galleryImageStr = theme.jsDelivr.url ? theme.jsDelivr.url : '';
 
 let imageStr = ''
 
 for (var i = 0, len = photos.length; i < len; i++) {
     var photo = photos[i];
+    var city = citys[i];
 
-    imageStr += "<a href=\"" + galleryImageStr + photo + "\"" +
+    imageStr += "<a href=\"" + galleryImageStr + photopath + photo + "\"" +
             "     class=\"photo-item\" rel=\"example_group\"" +
             "     data-fancybox=\"images\">" +
-            "      <img src=\"" + galleryImageStr + photo + "\"" +
-            "       alt=" + photo + ">\n" +
+            "      <img src=\"" + galleryImageStr + photopath + "s/s-" + photo + "\"" +
+            "       alt=" + city + ">\n" +
             "    </a>"
 
 }

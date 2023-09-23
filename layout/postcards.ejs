@@ -1,0 +1,42 @@
+<link rel="stylesheet" href="<%- theme.jsDelivr.url %><%- url_for(theme.libs.css.postcard) %>">
+<link rel="stylesheet" href="<%- theme.jsDelivr.url %><%- url_for(theme.libs.css.my) %>">
+
+<%- partial('_partial/bg-cover') %>
+
+
+<main class="content">
+    <div class="container">
+        <% if (site.data && site.data.postcards) { %>
+        <% var postcards = site.data.postcards; %>
+        <div class="postcard-wrapper row">
+            <% if (page.title == "明信片收件箱") { %>
+                <% var type = 0; %>
+                <p><a href="./sent">寄件箱</a></p>
+            <% } %>
+            <% if (page.title == "明信片寄件箱") { %>
+                <% var type = 1; %>
+                <p><a href="./">收件箱</a></p>
+            <% } %>
+
+            <% for (var i = 0, len = postcards[type].cards.length; i < len; i++) { %>
+            <div class="col s6 m4 l4 xl3 postcard-box">
+                <% var pclink = postcards[type].pcurl + postcards[type].cards[i].split('.')[0]; %>
+                <% if (type==0) var toflag = postcards[type].cards[i].slice(0, 2); %>
+                <% if (type==1) var toflag = postcards[type].towhere[i]; %>
+                <% if (isNaN(postcards[type].cards[i].charAt(3))) { %>
+                    <% var pclink = postcards[type].cardpath + postcards[0].cards[i] %>
+                <% }  %>
+                <a href="<%- pclink %>" class="postcard-item" data-aos="zoom-in-up">
+                     <div class="postcard-cover-box" style="background-image: url(<%- theme.jsDelivr.url %><%- postcards[type].cardpath + postcards[type].cards[i] %>);">
+                    </div>
+                    <p class="postcard-name">
+                        <i class="flag flag-<%- toflag %>"></i>
+                        <%- postcards[type].cards[i].split('.')[0] %>
+                    </p>
+                </a>
+            </div>
+            <% } %>
+        </div>
+        <% } %>
+    </div>
+</main>
