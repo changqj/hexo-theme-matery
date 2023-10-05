@@ -24,7 +24,7 @@
                 <% if (type==0) var toflag = postcards[type].cards[i].slice(0, 2); %>
                 <% if (type==1) var toflag = postcards[type].towhere[i]; %>
                 <% if (isNaN(postcards[type].cards[i].charAt(3))) { %>
-                    <% var pclink = postcards[type].cardpath + postcards[0].cards[i] %>
+                    <% var pclink = postcards[type].cardpath + postcards[type].cards[i] %>
                 <% }  %>
                 <a href="<%- pclink %>" class="postcard-item" data-aos="zoom-in-up">
                      <div class="postcard-cover-box" style="background-image: url(<%- theme.jsDelivr.url %><%- postcards[type].cardpath + postcards[type].cards[i] %>);">
