@@ -1,49 +1,41 @@
-<link rel="stylesheet" href="<%- theme.jsDelivr.url %><%- url_for(theme.libs.css.gallery) %>">
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="<%- theme.jsDelivr.url %><%- url_for(theme.libs.css.gallery) %>">
+    <link type="text/css" href="<%- theme.jsDelivr.url %><%- url_for(theme.libs.css.fancybox) %>" rel="stylesheet">
+    <link type="text/css" href="<%- theme.jsDelivr.url %><%- url_for(theme.libs.css.justifiedGallery) %>" rel="stylesheet">
 
-<link type="text/css" href="<%- theme.jsDelivr.url %><%- url_for(theme.libs.css.fancybox) %>" rel="stylesheet">
-<link type="text/css" href="<%- theme.jsDelivr.url %><%- url_for(theme.libs.css.justifiedGallery) %>" rel="stylesheet">
-
-<%- partial('_partial/post-cover') %>
-<%
-let galleries = [];
-if (site.data && site.data.galleries) {
-    galleries = site.data.galleries;
-}
-var pageTitle = page.title;
-function getCurrentGallery(galleries, pageTitle) {
-    for (let i = 0; i < galleries.length; i++) {
-        if (galleries[i]['name'] == pageTitle) {
-            return galleries[i];
+    <style>
+        .pagination {
+            text-align: center;
         }
-    }
-}
-var currentGallery = getCurrentGallery(galleries, pageTitle)
 
-var photos = currentGallery.photos;
-var photopath = currentGallery.photopath;
-var citys = currentGallery.descriptions;
+        .btn-prev, .btn-next {
+            display: inline-block;
+            margin: 10px; /* 根据需要调整按钮之间的间距 */
+            padding: 10px 10px; /* 根据需要调整按钮的内边距 */
+            background-color: #21cd6e; /* 按钮背景颜色 */
+            color: #fff; /* 按钮文本颜色 */
+            border: 1px solid #21cd6e; /* 按钮边框 */
+            border-radius: 5px; /* 按钮边框圆角 */
+            text-decoration: none; /* 去除按钮下划线 */
+            transition: background-color 0.3s; /* 添加按钮鼠标悬停时的过渡效果 */
+        }
 
-var galleryImageStr = theme.jsDelivr.url ? theme.jsDelivr.url : '';
+        .btn-prev:hover, .btn-next:hover {
+            background-color: #4a92de; /* 按钮悬停时的背景颜色 */
+        }
+    </style>
 
-let imageStr = ''
-
-for (var i = 0, len = photos.length; i < len; i++) {
-    var photo = photos[i];
-    var city = citys[i];
-
-    imageStr += "<a href=\"" + galleryImageStr + photopath + photo + "\"" +
-            "     class=\"photo-item\" rel=\"example_group\"" +
-            "     data-fancybox=\"images\">" +
-            "      <img src=\"" + galleryImageStr + photopath + "s/s-" + photo + "\"" +
-            "       alt=" + city + ">\n" +
-            "    </a>"
-
-}
-%>  
-
+    <%- partial('_partial/post-cover') %>
+</head>
+<body>
 <div class="container">
+    <% var galleries = site.data.galleries;%>
+    <% var pageTitle = page.title;%>
+    <% var pagepassword = page.password;%>
     <div class="photo-wrapper">
-        <% if (page.password ) { %>
+        <% if (pagepassword) { %>
 
             <script src="/js/crypto-js.js"></script>
             <script src="/js/gallery-encrypt.js"></script>
@@ -55,22 +47,123 @@ for (var i = 0, len = photos.length; i < len; i++) {
             </div>
             <div  id="mygallery">
                 <div class="waterfall" id="encrypt-blog" style="display:none">
-                    <%- aes(imageStr, page.password) %>
                 </div>
             </div>
         <% } else { %>
             <div class="waterfall" id="encrypt-blog">
-                <%- imageStr %>
             </div>
         <% } %>
+
+        <br>
+        <div class="pagination">
+            <a href="" class="btn-prev"><i class="fa-solid fa-circle-arrow-left"></i> 上一页</a>
+            <a class="page-index"></a>
+            <a href="" class="btn-next">下一页 <i class="fa-solid fa-circle-arrow-right"></i></a>
+        </div>
     </div>
 </div>
+
+<script>
+    var galleries = <%- JSON.stringify(galleries) %>;
+    var pageTitle = "<%- pageTitle%>";
+    function getCurrentGallery(galleries, pageTitle) {
+        for (let i = 0; i < galleries.length; i++) {
+            if (galleries[i]['name'] == pageTitle) {
+                return galleries[i];
+            }
+        }
+    }
+    var currentGallery = getCurrentGallery(galleries, pageTitle)
+
+    var photos = currentGallery.photos;
+    var photopath = currentGallery.photopath;
+    var citys = currentGallery.descriptions;
+    var theme = <%- JSON.stringify(theme) %>;
+    var galleryImageStr = theme.jsDelivr.url ? theme.jsDelivr.url : '';
+    var pagepassword = "<%- pagepassword%>";
+    var currentPage = parseInt(getParameterByName('page')) || 1;
+    var pageSize = 40; // Number of cards per page
+    var totalPages =Math.ceil(photos.length / pageSize);;
+    currentPage = Math.min(currentPage,totalPages);
+    currentPage = Math.max(currentPage,1);
+
+
+    if(currentPage==1){
+        var contentContainerBtn = document.getElementsByClassName('btn-prev');
+        contentContainerBtn[0].style.visibility = 'hidden';
+    }
+    if(currentPage==totalPages){
+        var contentContainerBtn = document.getElementsByClassName('btn-next');
+        contentContainerBtn[0].style.visibility = 'hidden';
+    }
+
+    var contentContainerIdxPage = document.querySelector('.page-index');
+    contentContainerIdxPage.textContent = "第"+currentPage+"/"+totalPages+"页";
+
+    function updatePageContent() {
+        let imageStr = ''
+
+        for (var i =  (currentPage - 1) * pageSize; i < Math.min(currentPage * pageSize, photos.length); i++) {
+            var photo = photos[i];
+            var city = citys[i];
+
+            imageStr += "<a href=\"" + galleryImageStr + photopath + photo + "\"" +
+                    "     class=\"photo-item\" rel=\"example_group\"" +
+                    "     data-fancybox=\"images\">" +
+                    "      <img src=\"" + galleryImageStr + photopath + "s/s-" + photo + "\"" +
+                    "       alt=" + city + ">\n" +
+                    "    </a>"
+        }
+        var contentContainer = document.getElementById('encrypt-blog');
+        if (pagepassword){
+            contentContainer.innerHTML = `${aes(imageStr,pagepassword)}`;
+        }
+        else {
+            contentContainer.innerHTML=`${imageStr}`;
+        }
+    }
+
+    document.addEventListener("click", function(e) {
+            if ((e.target.classList.contains("btn-prev") || e.target.classList.contains("fa-circle-arrow-left")) && currentPage > 1) {
+                currentPage--;
+                updatePageContent(); // Update the page content for the new currentPage
+                updateURLParameter('page', currentPage); // 更新 URL 参数
+            }
+            if ((e.target.classList.contains("btn-next") || e.target.classList.contains("fa-circle-arrow-right")) && currentPage < totalPages) {
+                currentPage++;
+                updatePageContent(); // Update the page content for the new currentPage
+                updateURLParameter('page', currentPage); // 更新 URL 参数
+            }
+        });
+
+        // 更新 URL 参数的函数
+        function updateURLParameter(key, value) {
+            var url = new URL(window.location.href);
+            url.searchParams.set(key, value);
+            window.history.replaceState({}, '', url);
+        }
+
+        // Get URL parameter function
+        function getParameterByName(name, url) {
+            if (!url) {
+                url = window.location.href;
+            }
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
+        updatePageContent();
+</script>
 
 <script src="<%- theme.jsDelivr.url %><%- url_for(theme.libs.js.fancybox) %>"></script>
 <script src="<%- theme.jsDelivr.url %><%- url_for(theme.libs.js.justifiedGallery) %>"></script>
 <script>
-
     $("a[rel=example_group]").fancybox();
     $("#encrypt-blog").justifiedGallery({margins: 5, rowHeight: 150});
-
 </script>
+</body>
+</html>

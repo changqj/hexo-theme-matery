@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Your CSS and other head elements -->
     <link rel="stylesheet" href="<%- theme.jsDelivr.url %><%- url_for(theme.libs.css.postcard) %>">
     <link rel="stylesheet" href="<%- theme.jsDelivr.url %><%- url_for(theme.libs.css.my) %>">
     <style>
@@ -37,7 +36,6 @@
     <%- partial('_partial/bg-cover') %>
 </head>
 <body>
-    <!-- Your existing HTML structure -->
     <main class="content">
         <div class="container">
             <% var postcards = site.data.postcards; %>
@@ -45,7 +43,6 @@
 
             <h3 class="typetitle"></h3>
             
-            <!-- Add a container for the page content -->
             <div id="myContentContainer" class="postcard-wrapper row">
                 <% if (page.title == "明信片收件箱") { %>
                     <% var type = 0; %>
@@ -55,7 +52,6 @@
                 <% } %>
             </div>
             <% var totalPages = Math.ceil(postcards[type].cards.length / pageSize); %>
-            <!-- Add Previous and Next buttons -->
             <br>
             <div class="pagination">
                 <a href="" class="btn-prev"><i class="fa-solid fa-circle-arrow-left"></i> 上一页</a>
