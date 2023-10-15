@@ -10,7 +10,7 @@
             text-align: center;
         }
 
-        .btn-prev, .btn-next {
+        .btn-prev, .btn-next, .btn-first, .btn-last {
             display: inline-block;
             margin: 10px; /* 根据需要调整按钮之间的间距 */
             padding: 10px 10px; /* 根据需要调整按钮的内边距 */
@@ -22,7 +22,7 @@
             transition: background-color 0.3s; /* 添加按钮鼠标悬停时的过渡效果 */
         }
 
-        .btn-prev:hover, .btn-next:hover {
+        .btn-prev:hover, .btn-next:hover, .btn-first:hover, .btn-last:hover {
             background-color: #4a92de; /* 按钮悬停时的背景颜色 */
         }
     </style>
@@ -30,39 +30,40 @@
     <%- partial('_partial/post-cover') %>
 </head>
 <body>
-<div class="container">
-    <% var galleries = site.data.galleries;%>
-    <% var pageTitle = page.title;%>
-    <% var pagepassword = page.password;%>
-    <div class="photo-wrapper">
-        <% if (pagepassword) { %>
-
-            <script src="/js/crypto-js.js"></script>
-            <script src="/js/gallery-encrypt.js"></script>
-            <div id="hbe-security">
-                <div class="hbe-input-container">
-                    <input type="password" class="hbe-form-control" id="pass"  placeholder="请输入密码查看内容"/>
-                    <a href="javascript:;" class="btn-decrypt" id="btn_decrypt">解密</a>
+    <main class="content">
+    <div class="container">
+        <% var galleries = site.data.galleries;%>
+        <% var pageTitle = page.title;%>
+        <% var pagepassword = page.password;%>
+        <div class="photo-wrapper">
+            <% if (pagepassword) { %>
+                <script src="/js/crypto-js.js"></script>
+                <script src="/js/gallery-encrypt.js"></script>
+                <div id="hbe-security">
+                    <div class="hbe-input-container">
+                        <input type="password" class="hbe-form-control" id="pass"  placeholder="请输入密码查看内容"/>
+                        <a href="javascript:;" class="btn-decrypt" id="btn_decrypt">解密</a>
+                    </div>
                 </div>
-            </div>
-            <div  id="mygallery">
-                <div class="waterfall" id="encrypt-blog" style="display:none">
+                <div  id="mygallery">
+                    <div class="waterfall" id="encrypt-blog" style="display:none">
+                    </div>
                 </div>
+            <% } else { %>
+                <div class="waterfall" id="encrypt-blog">
+                </div>
+            <% } %>
+            <br>
+            <div class="pagination">
+                <a href="" class="btn-first"><i class="fa-solid fa-angles-left"></i> 首页</a>
+                <a href="" class="btn-prev"><i class="fa-solid fa-angle-left"></i> 上一页</a>
+                <a class="page-index"></a>
+                <a href="" class="btn-next">下一页 <i class="fa-solid fa-angle-right"></i></a>
+                <a href="" class="btn-last">尾页 <i class="fa-solid fa-angles-right"></i></a>
             </div>
-        <% } else { %>
-            <div class="waterfall" id="encrypt-blog">
-            </div>
-        <% } %>
-
-        <br>
-        <div class="pagination">
-            <a href="" class="btn-prev"><i class="fa-solid fa-circle-arrow-left"></i> 上一页</a>
-            <a class="page-index"></a>
-            <a href="" class="btn-next">下一页 <i class="fa-solid fa-circle-arrow-right"></i></a>
         </div>
     </div>
-</div>
-
+</main>
 <script>
     var galleries = <%- JSON.stringify(galleries) %>;
     var pageTitle = "<%- pageTitle%>";
@@ -86,17 +87,14 @@
     var totalPages =Math.ceil(photos.length / pageSize);;
     currentPage = Math.min(currentPage,totalPages);
     currentPage = Math.max(currentPage,1);
-
-
     if(currentPage==1){
-        var contentContainerBtn = document.getElementsByClassName('btn-prev');
-        contentContainerBtn[0].style.visibility = 'hidden';
+        document.getElementsByClassName('btn-prev')[0].style.visibility = 'hidden';
+        document.getElementsByClassName('btn-first')[0].style.visibility = 'hidden';
     }
     if(currentPage==totalPages){
-        var contentContainerBtn = document.getElementsByClassName('btn-next');
-        contentContainerBtn[0].style.visibility = 'hidden';
+        document.getElementsByClassName('btn-next')[0].style.visibility = 'hidden';
+        document.getElementsByClassName('btn-last')[0].style.visibility = 'hidden';
     }
-
     var contentContainerIdxPage = document.querySelector('.page-index');
     contentContainerIdxPage.textContent = "第"+currentPage+"/"+totalPages+"页";
 
@@ -124,13 +122,23 @@
     }
 
     document.addEventListener("click", function(e) {
-            if ((e.target.classList.contains("btn-prev") || e.target.classList.contains("fa-circle-arrow-left")) && currentPage > 1) {
+            if ((e.target.classList.contains("btn-prev") || e.target.classList.contains("fa-angle-left")) && currentPage > 1) {
                 currentPage--;
                 updatePageContent(); // Update the page content for the new currentPage
                 updateURLParameter('page', currentPage); // 更新 URL 参数
             }
-            if ((e.target.classList.contains("btn-next") || e.target.classList.contains("fa-circle-arrow-right")) && currentPage < totalPages) {
+            if ((e.target.classList.contains("btn-next") || e.target.classList.contains("fa-angle-right")) && currentPage < totalPages) {
                 currentPage++;
+                updatePageContent(); // Update the page content for the new currentPage
+                updateURLParameter('page', currentPage); // 更新 URL 参数
+            }
+            if ((e.target.classList.contains("btn-first") || e.target.classList.contains("fa-angles-left")) && currentPage > 1) {
+                currentPage = 1;
+                updatePageContent(); // Update the page content for the new currentPage
+                updateURLParameter('page', currentPage); // 更新 URL 参数
+            }
+            if ((e.target.classList.contains("btn-last") || e.target.classList.contains("fa-angles-right")) && currentPage < totalPages) {
+                currentPage = totalPages;
                 updatePageContent(); // Update the page content for the new currentPage
                 updateURLParameter('page', currentPage); // 更新 URL 参数
             }
