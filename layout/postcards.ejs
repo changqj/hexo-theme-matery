@@ -1,42 +1,175 @@
-<link rel="stylesheet" href="<%- theme.jsDelivr.url %><%- url_for(theme.libs.css.postcard) %>">
-<link rel="stylesheet" href="<%- theme.jsDelivr.url %><%- url_for(theme.libs.css.my) %>">
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Your CSS and other head elements -->
+    <link rel="stylesheet" href="<%- theme.jsDelivr.url %><%- url_for(theme.libs.css.postcard) %>">
+    <link rel="stylesheet" href="<%- theme.jsDelivr.url %><%- url_for(theme.libs.css.my) %>">
+    <style>
+        .pagination, .typetitle {
+            text-align: center;
+            /* display: flex; */
+            /* justify-content: center; */
+            /* align-items: center; */
 
-<%- partial('_partial/bg-cover') %>
+        }
+        .inout {
+            text-align: left;
+        }
+
+        .btn-prev, .btn-next, .sent, .received {
+            display: inline-block;
+            margin: 10px; /* 根据需要调整按钮之间的间距 */
+            padding: 10px 10px; /* 根据需要调整按钮的内边距 */
+            background-color: #21cd6e; /* 按钮背景颜色 */
+            color: #fff; /* 按钮文本颜色 */
+            border: 1px solid #21cd6e; /* 按钮边框 */
+            border-radius: 5px; /* 按钮边框圆角 */
+            text-decoration: none; /* 去除按钮下划线 */
+            transition: background-color 0.3s; /* 添加按钮鼠标悬停时的过渡效果 */
+        }
+
+        .btn-prev:hover, .btn-next:hover, .sent:hover, .received:hover {
+            background-color: #4a92de; /* 按钮悬停时的背景颜色 */
+        }
+    </style>
 
 
-<main class="content">
-    <div class="container">
-        <% if (site.data && site.data.postcards) { %>
-        <% var postcards = site.data.postcards; %>
-        <div class="postcard-wrapper row">
-            <% if (page.title == "明信片收件箱") { %>
-                <% var type = 0; %>
-                <p><a href="./sent">寄件箱</a></p>
-            <% } %>
-            <% if (page.title == "明信片寄件箱") { %>
-                <% var type = 1; %>
-                <p><a href="./">收件箱</a></p>
-            <% } %>
+    <%- partial('_partial/bg-cover') %>
+</head>
+<body>
+    <!-- Your existing HTML structure -->
+    <main class="content">
+        <div class="container">
+            <% var postcards = site.data.postcards; %>
+            <% var pageSize = 24; %>
 
-            <% for (var i = 0, len = postcards[type].cards.length; i < len; i++) { %>
-            <div class="col s6 m4 l4 xl3 postcard-box">
-                <% var pclink = postcards[type].pcurl + postcards[type].cards[i].split('.')[0]; %>
-                <% if (type==0) var toflag = postcards[type].cards[i].slice(0, 2); %>
-                <% if (type==1) var toflag = postcards[type].towhere[i]; %>
-                <% if (isNaN(postcards[type].cards[i].charAt(3))) { %>
-                    <% var pclink = postcards[type].cardpath + postcards[type].cards[i] %>
-                <% }  %>
-                <a href="<%- pclink %>" class="postcard-item" data-aos="zoom-in-up">
-                     <div class="postcard-cover-box" style="background-image: url(<%- theme.jsDelivr.url %><%- postcards[type].cardpath + postcards[type].cards[i] %>);">
-                    </div>
-                    <p class="postcard-name">
-                        <i class="flag flag-<%- toflag %>"></i>
-                        <%- postcards[type].cards[i].split('.')[0] %>
-                    </p>
-                </a>
+            <h3 class="typetitle"></h3>
+            
+            <!-- Add a container for the page content -->
+            <div id="myContentContainer" class="postcard-wrapper row">
+                <% if (page.title == "明信片收件箱") { %>
+                    <% var type = 0; %>
+                <% } %>
+                <% if (page.title == "明信片寄件箱") { %>
+                    <% var type = 1; %>
+                <% } %>
             </div>
-            <% } %>
+            <% var totalPages = Math.ceil(postcards[type].cards.length / pageSize); %>
+            <!-- Add Previous and Next buttons -->
+            <br>
+            <div class="pagination">
+                <a href="" class="btn-prev"><i class="fa-solid fa-circle-arrow-left"></i> 上一页</a>
+                <a class="page-index"></a>
+                <a href="" class="btn-next">下一页 <i class="fa-solid fa-circle-arrow-right"></i></a>
+            </div>
         </div>
-        <% } %>
-    </div>
-</main>
+    </main>
+
+
+    <script>
+        // JavaScript to handle pagination
+        var currentPage = parseInt(getParameterByName('page')) || 1;
+        var pageSize = <%- pageSize%>; // Number of cards per page
+        var postcards = <%- JSON.stringify(postcards) %>;
+        var type = <%- type %>;
+        var totalPages = <%- totalPages%>;
+        currentPage = Math.min(currentPage,totalPages);
+        currentPage = Math.max(currentPage,1);
+
+
+        if(currentPage==1){
+            var contentContainerBtn = document.getElementsByClassName('btn-prev');
+            contentContainerBtn[0].style.visibility = 'hidden';
+        }
+        if(currentPage==totalPages){
+            var contentContainerBtn = document.getElementsByClassName('btn-next');
+            contentContainerBtn[0].style.visibility = 'hidden';
+        }
+
+        var contentContainerIdxPage = document.querySelector('.page-index');
+        contentContainerIdxPage.textContent = "第"+currentPage+"/"+totalPages+"页";
+
+        contentContainerIdxPage = document.querySelector('.typetitle');
+        if(type==0) contentContainerIdxPage.textContent = "收件箱";
+        if(type==1) contentContainerIdxPage.textContent = "寄件箱";
+
+
+
+        // Function to update the page content
+        function updatePageContent() {
+            var startIdx = (currentPage - 1) * pageSize;
+            var endIdx = Math.min(currentPage * pageSize, postcards[type].cards.length);
+
+            var contentContainer = document.getElementById('myContentContainer');
+            contentContainer.innerHTML = '';
+            var cardElement0 = document.createElement('div');
+            cardElement0.className = 'inout';
+            if (type==0) {   
+                cardElement0.innerHTML = `<p><a href="./sent" class="sent" title="去寄件箱"><i class="fa-solid fa-upload"></i> 寄件箱</a></p>`;
+            }
+            if (type == 1) {
+                cardElement0.innerHTML = `<p><a href="./" class="received" title="去收件箱"><i class="fa-solid fa-download"></i> 收件箱</a></p>`;
+            }
+            contentContainer.appendChild(cardElement0);
+            for (var i = startIdx; i < endIdx; i++) {
+                var pclink = postcards[type].pcurl + postcards[type].cards[i].split('.')[0];
+                var toflag = postcards[type].cards[i].slice(0, 2);
+
+                if (isNaN(postcards[type].cards[i].charAt(3))) {
+                    pclink = postcards[type].cardpath + postcards[type].cards[i];
+                }
+
+                var cardElement = document.createElement('div');
+                cardElement.className = 'col s6 m4 l4 xl3 postcard-box';
+                cardElement.innerHTML = `
+                    <a href="${pclink}" class="postcard-item" data-aos="zoom-in-up">
+                        <div class="postcard-cover-box" style="background-image: url(${postcards[type].cardpath + postcards[type].cards[i]})"></div>
+                        <p class="postcard-name">
+                            <i class="flag flag-${toflag}"></i>
+                            ${postcards[type].cards[i].split('.')[0]}
+                        </p>
+                    </a>
+                `;
+                contentContainer.appendChild(cardElement);
+            }
+        }
+
+        // Function to handle button clicks
+        document.addEventListener("click", function(e) {
+            if ((e.target.classList.contains("btn-prev") || e.target.classList.contains("fa-circle-arrow-left")) && currentPage > 1) {
+                currentPage--;
+                updatePageContent(); // Update the page content for the new currentPage
+                updateURLParameter('page', currentPage); // 更新 URL 参数
+            }
+            if ((e.target.classList.contains("btn-next") || e.target.classList.contains("fa-circle-arrow-right")) && currentPage < totalPages) {
+                currentPage++;
+                updatePageContent(); // Update the page content for the new currentPage
+                updateURLParameter('page', currentPage); // 更新 URL 参数
+            }
+        });
+
+        // 更新 URL 参数的函数
+        function updateURLParameter(key, value) {
+            var url = new URL(window.location.href);
+            url.searchParams.set(key, value);
+            window.history.replaceState({}, '', url);
+        }
+
+        // Get URL parameter function
+        function getParameterByName(name, url) {
+            if (!url) {
+                url = window.location.href;
+            }
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
+        // Initial page content
+        updatePageContent();
+    </script>
+</body>
+</html>
