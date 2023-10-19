@@ -111,7 +111,8 @@
             contentContainer.appendChild(cardElement0);
             for (var i = startIdx; i < endIdx; i++) {
                 var pclink = postcards[type].pcurl + postcards[type].cards[i].split('.')[0];
-                var toflag = postcards[type].cards[i].slice(0, 2);
+                if(type == 0) var toflag = postcards[type].cards[i].slice(0, 2);
+                if(type == 1) var toflag = postcards[type].towhere[i];
 
                 if (isNaN(postcards[type].cards[i].charAt(3))) {
                     pclink = postcards[type].cardpath + postcards[type].cards[i];

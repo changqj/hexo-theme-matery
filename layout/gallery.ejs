@@ -10,7 +10,19 @@
             text-align: center;
         }
 
-        .btn-prev, .btn-next, .btn-first, .btn-last {
+        .nextCountry {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-prevCountry {
+            order: 1;
+        }
+        .btn-nextCountry {
+            order: 2;
+        }
+
+        .btn-prev, .btn-next, .btn-first, .btn-last, .btn-prevCountry, .btn-nextCountry {
             display: inline-block;
             margin: 10px; /* 根据需要调整按钮之间的间距 */
             padding: 10px 10px; /* 根据需要调整按钮的内边距 */
@@ -22,7 +34,7 @@
             transition: background-color 0.3s; /* 添加按钮鼠标悬停时的过渡效果 */
         }
 
-        .btn-prev:hover, .btn-next:hover, .btn-first:hover, .btn-last:hover {
+        .btn-prev:hover, .btn-next:hover, .btn-first:hover, .btn-last:hover, .btn-prevCountry:hover, .btn-nextCountry:hover {
             background-color: #4a92de; /* 按钮悬停时的背景颜色 */
         }
     </style>
@@ -35,6 +47,10 @@
         <% var galleries = site.data.galleries;%>
         <% var pageTitle = page.title;%>
         <% var pagepassword = page.password;%>
+        <div class="nextCountry">
+            <a href="" class="btn-prevCountry"></a>
+            <a href="" class="btn-nextCountry"><i class="fa-solid fa-circle-arrow-right"></i></a>
+        </div>
         <div class="photo-wrapper">
             <% if (pagepassword) { %>
                 <script src="/js/crypto-js.js"></script>
@@ -67,14 +83,35 @@
 <script>
     var galleries = <%- JSON.stringify(galleries) %>;
     var pageTitle = "<%- pageTitle%>";
-    function getCurrentGallery(galleries, pageTitle) {
-        for (let i = 0; i < galleries.length; i++) {
-            if (galleries[i]['name'] == pageTitle) {
-                return galleries[i];
+    
+    for (let i = 0; i < galleries.length; i++) {
+        if (galleries[i]['name'] == pageTitle) {
+            var currentGallery = galleries[i];
+            if (i == 0) {
+                var prevCountry = galleries[galleries.length-1]['name'];
+                var prevflag = galleries[galleries.length-1]['flag'];
+                var nextCountry = galleries[i+1]['name'];
+                var nextflag = galleries[i+1]['flag'];
+            }else if (i == galleries.length-1) {
+                var prevCountry = galleries[i-1]['name'];
+                var prevflag = galleries[i-1]['flag'];
+                var nextCountry = galleries[0]['name'];
+                var nextflag = galleries[0]['flag'];
+            }else {
+                var prevCountry = galleries[i-1]['name'];
+                var prevflag = galleries[i-1]['flag'];
+                var nextCountry = galleries[i+1]['name'];
+                var nextflag = galleries[i+1]['flag'];
             }
+            break;
         }
     }
-    var currentGallery = getCurrentGallery(galleries, pageTitle)
+    const button1 = document.querySelector('.btn-prevCountry');
+    const button2 = document.querySelector('.btn-nextCountry');
+    button1.innerHTML = `<i class="fa-solid fa-circle-arrow-left"></i> ${prevCountry} <i class="flag flag-${prevflag}"></i>`;
+    button1.href = `../${prevCountry}`;
+    button2.innerHTML = `<i class="flag flag-${nextflag}"></i> ${nextCountry} <i class="fa-solid fa-circle-arrow-right"></i>`;
+    button2.href = `../${nextCountry}`;
 
     var photos = currentGallery.photos;
     var photopath = currentGallery.photopath;
