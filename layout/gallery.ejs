@@ -121,7 +121,7 @@
     var pagepassword = "<%- pagepassword%>";
     var currentPage = parseInt(getParameterByName('page')) || 1;
     var pageSize = 40; // Number of cards per page
-    var totalPages =Math.ceil(photos.length / pageSize);;
+    var totalPages =Math.ceil(photos.length / pageSize);
     currentPage = Math.min(currentPage,totalPages);
     currentPage = Math.max(currentPage,1);
     if(currentPage==1){
