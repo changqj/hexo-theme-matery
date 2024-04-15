@@ -69,14 +69,14 @@
                 <div class="waterfall" id="encrypt-blog">
                 </div>
             <% } %>
-            <br>
+            <!-- <br>
             <div class="pagination">
                 <a href="" class="btn-first"><i class="fa-solid fa-angles-left"></i> 首页</a>
                 <a href="" class="btn-prev"><i class="fa-solid fa-angle-left"></i> 上一页</a>
                 <a class="page-index"></a>
                 <a href="" class="btn-next">下一页 <i class="fa-solid fa-angle-right"></i></a>
                 <a href="" class="btn-last">尾页 <i class="fa-solid fa-angles-right"></i></a>
-            </div>
+            </div> -->
         </div>
     </div>
 </main>
@@ -119,26 +119,26 @@
     var theme = <%- JSON.stringify(theme) %>;
     var galleryImageStr = theme.jsDelivr.url ? theme.jsDelivr.url : '';
     var pagepassword = "<%- pagepassword%>";
-    var currentPage = parseInt(getParameterByName('page')) || 1;
-    var pageSize = 40; // Number of cards per page
-    var totalPages =Math.ceil(photos.length / pageSize);
-    currentPage = Math.min(currentPage,totalPages);
-    currentPage = Math.max(currentPage,1);
-    if(currentPage==1){
-        document.getElementsByClassName('btn-prev')[0].style.visibility = 'hidden';
-        document.getElementsByClassName('btn-first')[0].style.visibility = 'hidden';
-    }
-    if(currentPage==totalPages){
-        document.getElementsByClassName('btn-next')[0].style.visibility = 'hidden';
-        document.getElementsByClassName('btn-last')[0].style.visibility = 'hidden';
-    }
-    var contentContainerIdxPage = document.querySelector('.page-index');
-    contentContainerIdxPage.textContent = "第"+currentPage+"/"+totalPages+"页";
+    // var currentPage = parseInt(getParameterByName('page')) || 1;
+    // var pageSize = 40; // Number of cards per page
+    // var totalPages =Math.ceil(photos.length / pageSize);
+    // currentPage = Math.min(currentPage,totalPages);
+    // currentPage = Math.max(currentPage,1);
+    // if(currentPage==1){
+    //     document.getElementsByClassName('btn-prev')[0].style.visibility = 'hidden';
+    //     document.getElementsByClassName('btn-first')[0].style.visibility = 'hidden';
+    // }
+    // if(currentPage==totalPages){
+    //     document.getElementsByClassName('btn-next')[0].style.visibility = 'hidden';
+    //     document.getElementsByClassName('btn-last')[0].style.visibility = 'hidden';
+    // }
+    // var contentContainerIdxPage = document.querySelector('.page-index');
+    // contentContainerIdxPage.textContent = "第"+currentPage+"/"+totalPages+"页";
 
     function updatePageContent() {
         let imageStr = ''
 
-        for (var i =  (currentPage - 1) * pageSize; i < Math.min(currentPage * pageSize, photos.length); i++) {
+        for (var i =  0; i < photos.length; i++) {
             var photo = photos[i];
             var city = citys[i];
 
@@ -146,6 +146,7 @@
                     "     class=\"photo-item\" rel=\"example_group\"" +
                     "     data-fancybox=\"images\">" +
                     "      <img src=\"" + galleryImageStr + photopath + "s/s-" + photo + "\"" +
+                    "      loading=\"lazy\""+
                     "       alt=" + city + ">\n" +
                     "    </a>"
         }
@@ -158,48 +159,48 @@
         }
     }
 
-    document.addEventListener("click", function(e) {
-            if ((e.target.classList.contains("btn-prev") || e.target.classList.contains("fa-angle-left")) && currentPage > 1) {
-                currentPage--;
-                updatePageContent(); // Update the page content for the new currentPage
-                updateURLParameter('page', currentPage); // 更新 URL 参数
-            }
-            if ((e.target.classList.contains("btn-next") || e.target.classList.contains("fa-angle-right")) && currentPage < totalPages) {
-                currentPage++;
-                updatePageContent(); // Update the page content for the new currentPage
-                updateURLParameter('page', currentPage); // 更新 URL 参数
-            }
-            if ((e.target.classList.contains("btn-first") || e.target.classList.contains("fa-angles-left")) && currentPage > 1) {
-                currentPage = 1;
-                updatePageContent(); // Update the page content for the new currentPage
-                updateURLParameter('page', currentPage); // 更新 URL 参数
-            }
-            if ((e.target.classList.contains("btn-last") || e.target.classList.contains("fa-angles-right")) && currentPage < totalPages) {
-                currentPage = totalPages;
-                updatePageContent(); // Update the page content for the new currentPage
-                updateURLParameter('page', currentPage); // 更新 URL 参数
-            }
-        });
+    // document.addEventListener("click", function(e) {
+    //         if ((e.target.classList.contains("btn-prev") || e.target.classList.contains("fa-angle-left")) && currentPage > 1) {
+    //             currentPage--;
+    //             updatePageContent(); // Update the page content for the new currentPage
+    //             updateURLParameter('page', currentPage); // 更新 URL 参数
+    //         }
+    //         if ((e.target.classList.contains("btn-next") || e.target.classList.contains("fa-angle-right")) && currentPage < totalPages) {
+    //             currentPage++;
+    //             updatePageContent(); // Update the page content for the new currentPage
+    //             updateURLParameter('page', currentPage); // 更新 URL 参数
+    //         }
+    //         if ((e.target.classList.contains("btn-first") || e.target.classList.contains("fa-angles-left")) && currentPage > 1) {
+    //             currentPage = 1;
+    //             updatePageContent(); // Update the page content for the new currentPage
+    //             updateURLParameter('page', currentPage); // 更新 URL 参数
+    //         }
+    //         if ((e.target.classList.contains("btn-last") || e.target.classList.contains("fa-angles-right")) && currentPage < totalPages) {
+    //             currentPage = totalPages;
+    //             updatePageContent(); // Update the page content for the new currentPage
+    //             updateURLParameter('page', currentPage); // 更新 URL 参数
+    //         }
+    //     });
 
         // 更新 URL 参数的函数
-        function updateURLParameter(key, value) {
-            var url = new URL(window.location.href);
-            url.searchParams.set(key, value);
-            window.history.replaceState({}, '', url);
-        }
+        // function updateURLParameter(key, value) {
+        //     var url = new URL(window.location.href);
+        //     url.searchParams.set(key, value);
+        //     window.history.replaceState({}, '', url);
+        // }
 
         // Get URL parameter function
-        function getParameterByName(name, url) {
-            if (!url) {
-                url = window.location.href;
-            }
-            name = name.replace(/[\[\]]/g, "\\$&");
-            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, " "));
-        }
+        // function getParameterByName(name, url) {
+        //     if (!url) {
+        //         url = window.location.href;
+        //     }
+        //     name = name.replace(/[\[\]]/g, "\\$&");
+        //     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        //         results = regex.exec(url);
+        //     if (!results) return null;
+        //     if (!results[2]) return '';
+        //     return decodeURIComponent(results[2].replace(/\+/g, " "));
+        // }
 
         updatePageContent();
 </script>
