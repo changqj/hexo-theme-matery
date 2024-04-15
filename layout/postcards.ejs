@@ -39,7 +39,7 @@
     <main class="content">
         <div class="container">
             <% var postcards = site.data.postcards; %>
-            <% var pageSize = 24; %>
+            <% var pageSize = 36; %>
 
             <h3 class="typetitle"></h3>
             
@@ -103,10 +103,12 @@
             var cardElement0 = document.createElement('div');
             cardElement0.className = 'inout';
             if (type==0) {   
-                cardElement0.innerHTML = `<p><a href="./sent" class="sent" title="去寄件箱"><i class="fa-solid fa-upload"></i> 寄件箱</a></p>`;
+                cardElement0.innerHTML = `<p><a href="./sent" class="sent" title="去寄件箱"><i class="fa-solid fa-upload"></i> 寄件箱</a></p>
+                <p><a>&nbsp;&nbsp;&nbsp;&nbsp;上次更新于：${postcards[type].datatime}</a></p>`;
             }
             if (type == 1) {
-                cardElement0.innerHTML = `<p><a href="./" class="received" title="去收件箱"><i class="fa-solid fa-download"></i> 收件箱</a></p>`;
+                cardElement0.innerHTML = `<p><a href="./" class="received" title="去收件箱"><i class="fa-solid fa-download"></i> 收件箱</a></p>
+                <p><a>&nbsp;&nbsp;&nbsp;&nbsp;上次更新于：${postcards[type].datatime}</a></p>`;
             }
             contentContainer.appendChild(cardElement0);
             for (var i = startIdx; i < endIdx; i++) {
@@ -119,10 +121,10 @@
                 }
 
                 var cardElement = document.createElement('div');
-                cardElement.className = 'col s6 m4 l4 xl3 postcard-box';
+                cardElement.className = 'col s6 m4 l3 xl2 postcard-box';
                 cardElement.innerHTML = `
                     <a href="${pclink}" class="postcard-item" data-aos="zoom-in-up">
-                        <div class="postcard-cover-box" style="background-image: url(${postcards[type].cardpath + postcards[type].cards[i]})"></div>
+                        <div class="postcard-cover-box" style="background-image: url(${postcards[type].cardpath + postcards[type].cards[i]}); background-position: center bottom;"></div>
                         <p class="postcard-name">
                             <i class="flag flag-${toflag}"></i>
                             ${postcards[type].cards[i].split('.')[0]}

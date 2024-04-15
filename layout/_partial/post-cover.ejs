@@ -1,8 +1,8 @@
 <%
 var featureimg = url_for('/medias/bg.jpg');
-if (page.img) {
-    featureimg = url_for(page.img);
-} else {
+<!-- if (page.img) { -->
+    <!-- featureimg = url_for(page.img); -->
+<!-- } else { -->
     var hashCode = function (str) {
         if (!str && str.length === 0) {
             return 0;
@@ -22,7 +22,7 @@ if (page.img) {
     featureimg = theme.jsDelivr.url
             ? theme.jsDelivr.url + url_for(theme.featureImages[num])
             : url_for(theme.featureImages[num]);
-}
+<!-- } -->
 %>
 <div class="bg-cover pd-header post-cover" style="background-image: url('<%- featureimg %>'); <% if(page.pagetype== "personal") { %> height: 20vh !important; <% } %>">
     <div class="container" style="right: 0px;left: 0px;">

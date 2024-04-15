@@ -8,13 +8,13 @@
   .postcard-wrapper .postcard-item {
     display: block;
     overflow: hidden;
-    background-color: #fff;
+    /* background-color: #b57f7f; */
     padding: 5px;
-    padding-bottom: 0;
+    padding-bottom: 10px;
     position: relative;
-    -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.22);
-    -webkit-box-shadow: 0 1px 3px 0 rgba(118, 117, 117, 0.22);
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.22);
+    /* -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.22); */
+    /* -webkit-box-shadow: 0 1px 3px 0 rgba(118, 117, 117, 0.22); */
+    /* box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.22); */
   }
   
   .postcard-cover-box{
@@ -25,7 +25,7 @@
     position: relative;
     background: center center no-repeat;
     -webkit-background-size: cover;
-    background-size: cover;
+    background-size: contain;
   }
   
   .postcard-cover-box .postcard-cover-img {
@@ -37,6 +37,7 @@
     transform: translate(-50%,-50%);
   }
   .postcard-item .postcard-name{
+    padding: 5px;
     font-size: 14px;
     line-height: 24px;
     text-align: center;
