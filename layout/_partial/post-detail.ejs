@@ -72,16 +72,28 @@
 				<% } %>
             </div>
             <% } else { %>
-                <div class="post-info">
+                <div class="post-info" style="display: flex; flex-direction: row; align-items: stretch;">
                     
-                    <div>
+                    <div class="post-info-left">
                         <i class="fas fa-user" style="color:dimgrey;"></i>&nbsp;&nbsp;<a style="color: #42b983; font-weight: bold;"><%- page.author %></a>
                     <br>
                         <i class="fa-solid fa-location-dot" style="color:dimgrey;"></i>&nbsp;&nbsp;&nbsp;<a style="color: #42b983; font-weight: bold;"><%- page.address %>&nbsp;<i class="flag flag-<%- page.addflag %>"></i></a>
                     <br>
+                        <% var idx_topic = 0; %>
+                        <% page.topics.forEach(function(topic) { %>
+                            <% if (idx_topic ==0) { %>
+                                <i class="fa-brands fa-researchgate" style="color:dimgrey;"></i>&nbsp;&nbsp;<a style="color: #42b983; font-weight: bold;"><%- page.topics[idx_topic] %></a><br>
+                                <% } else { %>
+                                <i class="fa-brands fa-researchgate" style="color:dimgrey;opacity: 0;"></i>&nbsp;&nbsp;<a style="color: #42b983; font-weight: bold;"><%- page.topics[idx_topic] %></a><br>
+                            <% } %>
+                            <% idx_topic++; %>
+                        <% }); %>
                         <i class="fas fa-envelope" style="color:dimgrey;"></i>&nbsp;&nbsp;<a style="color: #42b983; font-weight: bold;"><%- page.email %></a>
                     </div>
-    
+                    
+                    <div class="post-info-right" style="height: 0px;">
+                        <img id="personalPhoto" src="/images/cqj.png" style="float: right; height: 10px;">
+                    </div>
                 </div>
             <% } %>
         </div>
@@ -261,3 +273,23 @@
 <% } %>
 
 <%- partial('_partial/codeblock') %>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 获取类名为'post-info-right'的div
+        var childDiv = document.querySelector('.post-info-right');
+        // 获取该div的父元素
+        var parentDiv = childDiv.parentElement;
+        // 获取父元素的高度
+        var parentHeight = parentDiv.offsetHeight;
+        // 设置图片的高度为父元素的高度
+        var img = document.getElementById('personalPhoto');
+        img.style.height = parentHeight + 'px';
+        img.style.objectFit = 'cover';
+        // 为图片添加圆形边框和阴影
+        img.style.borderRadius = '10%'; // 使图片变为圆形
+        img.style.border = '3px solid #fff'; // 设置边框颜色为白色
+        img.style.boxShadow = '0 0 8px rgba(0, 0, 0, 0.6)'; // 添加阴影效果
+        // console.log('Parent div height:', parentHeight);
+    });
+</script>
