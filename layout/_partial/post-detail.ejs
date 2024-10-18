@@ -75,20 +75,20 @@
                 <div class="post-info" style="display: flex; flex-direction: row; align-items: stretch;">
                     
                     <div class="post-info-left">
-                        <i class="fas fa-user" style="color:dimgrey;"></i>&nbsp;&nbsp;<a style="color: #42b983; font-weight: bold;"><%- page.author %></a>
+                        <i class="fas fa-user" style="color:dimgrey;"></i>&nbsp;&nbsp;<a style="color: #45acce; font-weight: bold;"><%- page.author %></a>
                     <br>
-                        <i class="fa-solid fa-location-dot" style="color:dimgrey;"></i>&nbsp;&nbsp;&nbsp;<a style="color: #42b983; font-weight: bold;"><%- page.address %>&nbsp;<i class="flag flag-<%- page.addflag %>"></i></a>
+                        <i class="fa-solid fa-location-dot" style="color:dimgrey;"></i>&nbsp;&nbsp;&nbsp;<a style="color: #45acce; font-weight: bold;"><%- page.address %>&nbsp;<i class="flag flag-<%- page.addflag %>"></i></a>
                     <br>
                         <% var idx_topic = 0; %>
                         <% page.topics.forEach(function(topic) { %>
                             <% if (idx_topic ==0) { %>
-                                <i class="fa-brands fa-researchgate" style="color:dimgrey;"></i>&nbsp;&nbsp;<a style="color: #42b983; font-weight: bold;"><%- page.topics[idx_topic] %></a><br>
+                                <i class="fa-brands fa-researchgate" style="color:dimgrey;"></i>&nbsp;&nbsp;<a style="color: #45acce; font-weight: bold;"><%- page.topics[idx_topic] %></a><br>
                                 <% } else { %>
-                                <i class="fa-brands fa-researchgate" style="color:dimgrey;opacity: 0;"></i>&nbsp;&nbsp;<a style="color: #42b983; font-weight: bold;"><%- page.topics[idx_topic] %></a><br>
+                                <i class="fa-brands fa-researchgate" style="color:dimgrey;opacity: 0;"></i>&nbsp;&nbsp;<a style="color: #45acce; font-weight: bold;"><%- page.topics[idx_topic] %></a><br>
                             <% } %>
                             <% idx_topic++; %>
                         <% }); %>
-                        <i class="fas fa-envelope" style="color:dimgrey;"></i>&nbsp;&nbsp;<a style="color: #42b983; font-weight: bold;"><%- page.email %></a>
+                        <i class="fas fa-envelope" style="color:dimgrey;"></i>&nbsp;&nbsp;<a style="color: #45acce; font-weight: bold;"><%- page.email %></a>
                     </div>
                     
                     <div class="post-info-right" style="height: 0px;">
