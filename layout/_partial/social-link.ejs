@@ -22,9 +22,21 @@
     </a>
 <% } %>
 
+<% if (theme.socialLink.instagram) { %>
+    <a href="<%= theme.socialLink.instagram %>" class="tooltipped" target="_blank" data-tooltip="关注我的Instagram" data-position="top" data-delay="50">
+        <i class="fab fa-instagram"></i>
+    </a>
+<% } %>
+
 <% if (theme.socialLink.linkedin) { %>
     <a href="<%= theme.socialLink.linkedin %>" class="tooltipped" target="_blank" data-tooltip="关注我的Linkedin" data-position="top" data-delay="50">
         <i class="fab fa-linkedin"></i>
+    </a>
+<% } %>
+
+<% if (theme.socialLink.researchgate) { %>
+    <a href="<%= theme.socialLink.researchgate %>" class="tooltipped" target="_blank" data-tooltip="我的ResearchGate" data-position="top" data-delay="50">
+        <i class="fab fa-researchgate"></i>
     </a>
 <% } %>
 
